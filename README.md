@@ -9,3 +9,5 @@ A RAG (Retrieval-Augmented Generation) Based Knowledge Assistant is an AI-powere
 • Session management
 • User profile handling
 • Protected access to application features
+0- Today, Module 2 – Document Upload and Processing Module was successfully implemented and updated on GitHub.
+Description: This module allows users to upload documents such as PDF, DOCX, and TXT files. The uploaded documents are processed, cleaned, and prepared for storage in the knowledge base to support accurate information retrieval.
