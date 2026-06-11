@@ -1,0 +1,73 @@
+# Streamlit Application Module
+# Purpose:
+- The Streamlit Application provides an interactive user interface for users to upload documents, ask questions, and receive AI-generated responses from the RAG-based Knowledge Assistant.
+# Functions:
+User-friendly chat interface
+Document upload (PDF, DOCX, TXT)
+Display AI responses
+Show conversation history
+Manage user interactions
+Connect frontend with backend AI modules
+import streamlit as st
+
+from modules.document import process_document
+from modules.embedding import create_vector_store
+from modules.retrieval import retrieve_answer
+from modules.generation import generate_response
+
+
+st.title("RAG-Based Knowledge Assistant")
+
+
+uploaded_file = st.file_uploader(
+    "Upload Document",
+    type=["pdf"]
+)
+
+
+if uploaded_file:
+
+    with open(
+        "data.pdf",
+        "wb"
+    ) as f:
+        f.write(
+            uploaded_file.read()
+        )
+
+
+    if st.button("Process"):
+
+        chunks = process_document(
+            "data.pdf"
+        )
+
+        create_vector_store(
+            chunks
+        )
+
+        st.success(
+            "Document Processed"
+        )
+query = st.text_input(
+    "Ask your question"
+)
+if st.button("Search"):
+
+    docs = retrieve_answer(
+        query
+    )
+
+    context=""
+
+    for doc in docs:
+        context += doc.page_content
+
+
+    answer = generate_response(
+        context,
+        query
+    )
+
+
+    st.write(answer)
