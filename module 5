@@ -1,0 +1,28 @@
+# AI Response Generation Module
+# Purpose:
+- The AI Response Generation Module uses the retrieved document information and an LLM to generate accurate, meaningful, and context-aware answers for user queries.
+# Functions:
+Combine user queries with retrieved context
+Generate AI-based responses
+Provide accurate document-based answers
+Maintain conversation history
+Handle follow-up questions
+Reduce incorrect or irrelevant responses
+from langchain_google_genai import ChatGoogleGenerativeAI
+def generate_response(context,query):
+
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-1.5-flash",
+        temperature=0.3
+    )
+    prompt=f"""
+    Answer the question using the context.
+
+    Context:
+    {context}
+
+    Question:
+    {query}
+    """
+    response = llm.invoke(prompt)
+    return response.content
