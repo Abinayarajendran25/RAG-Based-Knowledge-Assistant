@@ -1,0 +1,32 @@
+# Retrieval Module
+# Purpose:
+- The Retrieval Module finds the most relevant information from the stored document database based on the user's query.
+# Functions:
+Process user queries
+Convert queries into embeddings
+Perform semantic search
+Retrieve relevant document chunks
+Rank information based on similarity score
+Provide context to the AI Response Generation Module
+from langchain_community.vectorstores import FAISS
+from langchain_community.embeddings import HuggingFaceEmbeddings
+
+def retrieve_answer(query):
+
+    embeddings = HuggingFaceEmbeddings(
+        model_name=
+        "sentence-transformers/all-MiniLM-L6-v2"
+    )
+
+    db = FAISS.load_local(
+        "vector_store",
+        embeddings,
+        allow_dangerous_deserialization=True
+    )
+
+    result = db.similarity_search(
+        query,
+        k=3
+    )
+
+    return result
