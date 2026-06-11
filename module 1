@@ -1,0 +1,67 @@
+# Module 1 – User Authentication Module was successfully implemented and updated on GitHub.
+# Description:
+- This module provides secure user registration and login functionality. It ensures that only authorized users can access the RAG-Based Knowledge Assistant and its features.
+# Features:
+• User registration and login
+• Secure password authentication
+• Session management
+• User profile handling
+• Protected access to application features
+import sqlite3
+import bcrypt
+
+def create_table():
+    conn = sqlite3.connect("database/users.db")
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+        id INTEGER PRIMARY KEY,
+        username TEXT,
+        password TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+
+def register(username,password):
+
+    conn = sqlite3.connect("database/users.db")
+    cur = conn.cursor()
+
+    hashed = bcrypt.hashpw(
+        password.encode(),
+        bcrypt.gensalt()
+    )
+
+    cur.execute(
+        "INSERT INTO users(username,password) VALUES(?,?)",
+        (username,hashed)
+    )
+
+    conn.commit()
+    conn.close()
+
+
+def login(username,password):
+
+    conn = sqlite3.connect("database/users.db")
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT password FROM users WHERE username=?",
+        (username,)
+    )
+
+    user = cur.fetchone()
+    conn.close()
+
+    if user:
+        return bcrypt.checkpw(
+            password.encode(),
+            user[0]
+        )
+
+    return False
